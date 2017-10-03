@@ -1,1 +1,22 @@
+public class Pivot_mapping extends Mapper <Object, Text, Text, Text> {
+	
+  private Text key = new Text();
+	private Text value = new Text();
+  
+  public class Pivot_mapping(Text key, Text Value) {
+    
+    method Map(docid a, doc d)
+      for all term t ∈ doc d do
+        Emit(term t, count 1)    
+    }
+        
+  public class Pivot_reducing(Text key, Text Value) {
+  
+    method Reduce(term t, counts [c1, c2, . . .])
+    sum ← 0
+    for all count c ∈ counts [c1, c2, . . .] do
+      sum ← sum + c
+    Emit(term t, count sum)
+    }
 
+}
