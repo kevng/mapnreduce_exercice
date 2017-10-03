@@ -1,0 +1,44 @@
+  // MapReduce with the word count example
+  
+  public class Pivot_mapping(Text key, Text Value) {
+    
+    method Map(key k, value v)
+      for all term t of value v do
+        Emit(term t, count 1)    
+    }
+        
+  public class Pivot_reducing(Text key, Text Value) {
+  
+    method Reduce(term t, counts [c1, c2, . . .])
+    sum ← 0
+    for all count c ∈ counts [c1, c2, . . .] do
+      sum ← sum + c
+    Emit(term t, count sum)
+    }
+    
+// MapReduce with the Pivot example in Java
+    
+public class Pivot_mapping extends Mapper<Object, Text, Text, Text> {
+
+    @Override
+    public void pivot_mapping(Object key, Text value, Context context) throws IOException, InterruptedException {
+    
+    // Definition of an array filled with String values
+    String[] fields = value.toString(); 
+    
+    // For all values of the array
+    for (int i = 0; i < fields.length; ++i) {
+        if ("".equals(fields[i])) {
+		fields[i] = null;
+	}
+    }
+    List<String> fields_list = Arrays.asList(fields);
+    Text textKey = new Text(fields_list.get(0));
+    Text textValue = new Text(fields_list.get(1));
+    context.write(textKey,textValue);
+    }
+}
+
+public class Pivot_reducing extends Reduce<> {
+
+}
