@@ -1,0 +1,24 @@
+// Création d'une table regroupant différents modèles de constructeurs de voitures
+db.foo.drop();
+
+// Insertion d'informations dans les lignes & colonnes de la table
+db.foo.insert( { constructeur: "Renault", modele: ['Megane', 'Kadjar', 'Twizy'] })
+db.foo.insert( { constructeur: "Peugeot", modele: ['206', '306', '406'] })
+
+// Fonction de mappage des données avec définitions de K,V les clés & valeurs
+map = function() {
+  for(var i in this.modele){
+    key = { modele: this.modele[i] };
+    value = { constructeur: [ this.constructeur ] };
+    emit(key, value);
+  }
+}
+
+// Fonction de regroupement qui va combiner les résultats après le mappage
+reduce = function(key, values) {
+  constructeur_list = { constructeur: [] };
+  for(var i in values) {
+    constructeur_list.constructeur = values[i].constructeur.concat(constructeur_list.constructeur);
+  }
+  return constructeur_list;
+}
